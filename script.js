@@ -6,6 +6,9 @@ const board_background = "white";
 const snake_col = "lightblue";
 const snake_border = "darkblue";
 
+let dx = 10;
+let dy = 0;
+
 //snake
 let snake = [
   { x: 200, y: 200 },
@@ -18,8 +21,14 @@ let snake = [
 main();
 
 function main() {
-  clearCanvas();
-  drawSnake();
+  setTimeout(() => {
+    clearCanvas();
+    drawSnake();
+    moveSnake();
+    main();
+  }, 100);
+  // clearCanvas();
+  // drawSnake();
 }
 
 function clearCanvas() {
@@ -40,3 +49,41 @@ function drawSnake() {
   snake.forEach((snakePart) => drawSnakePart(snakePart));
   // snake.forEach(drawSnakePart);
 }
+
+function moveSnake(dx, dy) {
+  if (
+    snake[0].x + dx < snakeBoard.width &&
+    snake[0].y + dy < snakeBoard.height
+  ) {
+    const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+    snake.unshift(head);
+    snake.pop();
+  }
+}
+
+function changeDirection(e) {
+  const goingUp = dy === -10;
+  const goingDown = dy === 10;
+  const goingRight = dx === 10;
+  const goingLeft = dx === -10;
+
+  if (e.keyCode == "38" && !goingDown) {
+    // up arrow
+    dx = 0;
+    dy = -10;
+  } else if (e.keyCode == "40" && !goingUp) {
+    // down arrow
+    dx = 0;
+    dy = 10;
+  } else if (e.keyCode == "37" && !goingRight) {
+    // left arrow
+    dx = -10;
+    dy = 0;
+  } else if (e.keyCode == "39" && !goingLeft) {
+    // right arrow
+    dx = 10;
+    dy = 0;
+  }
+}
+
+window.addEventListener("keydown", changeDirection);
