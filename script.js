@@ -22,12 +22,13 @@ let snake = [
 main();
 genFood();
 
-document.addEventListener("keydown", changeDirection);
-
 function main() {
   if (checkForGameEnd()) {
+    resetBtn.style.display = "block";
     return;
   }
+  resetBtn.style.display = "none";
+
   setTimeout(() => {
     clearCanvas();
     showFood();
@@ -120,3 +121,21 @@ function genFood() {
     }
   });
 }
+
+document.addEventListener("keydown", changeDirection);
+
+//Resetting all the things
+resetBtn.addEventListener("click", () => {
+  clearCanvas();
+  snake = [
+    { x: 200, y: 200 },
+    { x: 190, y: 200 },
+    { x: 180, y: 200 },
+    { x: 170, y: 200 },
+    { x: 160, y: 200 },
+  ];
+  dx = 10;
+  dy = 0;
+  main();
+  genFood();
+});
