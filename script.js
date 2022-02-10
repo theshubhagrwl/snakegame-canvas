@@ -20,15 +20,18 @@ let snake = [
 
 main();
 
+document.addEventListener("keydown", changeDirection);
+
 function main() {
+  if (checkForGameEnd()) {
+    return;
+  }
   setTimeout(() => {
     clearCanvas();
-    drawSnake();
     moveSnake();
+    drawSnake();
     main();
   }, 100);
-  // clearCanvas();
-  // drawSnake();
 }
 
 function clearCanvas() {
@@ -50,15 +53,10 @@ function drawSnake() {
   // snake.forEach(drawSnakePart);
 }
 
-function moveSnake(dx, dy) {
-  if (
-    snake[0].x + dx < snakeBoard.width &&
-    snake[0].y + dy < snakeBoard.height
-  ) {
-    const head = { x: snake[0].x + dx, y: snake[0].y + dy };
-    snake.unshift(head);
-    snake.pop();
-  }
+function moveSnake() {
+  const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+  snake.unshift(head);
+  snake.pop();
 }
 
 function changeDirection(e) {
@@ -86,4 +84,18 @@ function changeDirection(e) {
   }
 }
 
-window.addEventListener("keydown", changeDirection);
+function checkForGameEnd() {
+  for (let i = 4; i < snake.length; i++) {
+    const hasCollided = snake[i].x === snake[0].x && snake[i].y === snake[0].y;
+    if (hasCollided) {
+      console.log("ended");
+      return true;
+    }
+  }
+  const leftWall = snake[0].x < 0;
+  const rightWall = snake[0].x > snakeBoard.width - 10;
+  const topWall = snake[0].y < 0;
+  const bottomWall = snake[0].y > snakeBoard.height - 10;
+
+  return leftWall || rightWall || topWall || bottomWall;
+}
