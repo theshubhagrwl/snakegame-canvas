@@ -3,10 +3,12 @@ var snakeBoardCtx = snakeBoard.getContext("2d");
 var resetBtn = document.getElementById("reset-btn");
 var scoreEle = document.getElementById("score-text");
 
-const board_border = "black";
-const board_background = "white";
-const snake_col = "lightblue";
+const board_border = "#e7e9eb";
+const board_background = "#1d1b1b";
+const snake_col = "#4775ea";
 const snake_border = "darkblue";
+const food_color = "#e7471d";
+const food_border = "#e7471d";
 
 let dx = 10;
 let dy = 0;
@@ -26,10 +28,10 @@ genFood();
 
 function main() {
   if (checkForGameEnd()) {
-    resetBtn.style.display = "block";
+    resetBtn.style.visibility = "visible";
     return;
   }
-  resetBtn.style.display = "none";
+  resetBtn.style.visibility = "hidden";
 
   setTimeout(() => {
     clearCanvas();
@@ -116,8 +118,8 @@ function checkForGameEnd() {
 }
 
 function showFood() {
-  snakeBoardCtx.fillStyle = "lightgreen";
-  snakeBoardCtx.strokeStyle = "darkgreen";
+  snakeBoardCtx.fillStyle = food_color;
+  snakeBoardCtx.strokeStyle = food_border;
   snakeBoardCtx.fillRect(foodX, foodY, 10, 10);
   snakeBoardCtx.strokeRect(foodX, foodY, 10, 10);
 }
