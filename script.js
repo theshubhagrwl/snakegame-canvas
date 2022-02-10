@@ -1,6 +1,7 @@
 var snakeBoard = document.getElementById("canvas");
 var snakeBoardCtx = snakeBoard.getContext("2d");
 var resetBtn = document.getElementById("reset-btn");
+var scoreEle = document.getElementById("score-text");
 
 const board_border = "black";
 const board_background = "white";
@@ -10,6 +11,7 @@ const snake_border = "darkblue";
 let dx = 10;
 let dy = 0;
 let foodX, foodY;
+let score = 0;
 //snake
 let snake = [
   { x: 200, y: 200 },
@@ -60,7 +62,17 @@ function drawSnake() {
 function moveSnake() {
   const head = { x: snake[0].x + dx, y: snake[0].y + dy };
   snake.unshift(head);
-  snake.pop();
+  // snake.pop();
+
+  const hasEatenFood = snake[0].x == foodX && snake[0].y == foodY;
+  if (hasEatenFood) {
+    //score++
+    score += 100;
+    scoreEle.innerText = `Calories : ${score}`;
+    genFood();
+  } else {
+    snake.pop();
+  }
 }
 
 function changeDirection(e) {
@@ -111,15 +123,18 @@ function showFood() {
 }
 
 function genFood() {
-  foodX = Math.random() * 390 + 10;
-  foodY = Math.random() * 390 + 10;
+  foodX =
+    Math.round((Math.random() * (snakeBoard.width - 10 - 10) + 0) / 10) * 10;
+  foodY =
+    Math.round((Math.random() * (snakeBoard.height - 10 - 10) + 0) / 10) * 10;
 
-  snake.forEach((part) => {
-    const hasEaten = part.x == foodX && part.y == foodY;
-    if (hasEaten) {
-      genFood();
-    }
-  });
+  // snake.forEach((part) => {
+  //   const hasEaten = part.x == foodX && part.y == foodY;
+  //   if (hasEaten) {
+  //     console.log("kha liya");
+  //     genFood();
+  //   }
+  // });
 }
 
 document.addEventListener("keydown", changeDirection);
@@ -136,6 +151,8 @@ resetBtn.addEventListener("click", () => {
   ];
   dx = 10;
   dy = 0;
+  score = 0;
+  scoreEle.innerText = `Calories : ${score}`;
   main();
   genFood();
 });
