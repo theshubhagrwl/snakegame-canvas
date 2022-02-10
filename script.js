@@ -1,5 +1,6 @@
 var snakeBoard = document.getElementById("canvas");
 var snakeBoardCtx = snakeBoard.getContext("2d");
+var resetBtn = document.getElementById("reset-btn");
 
 const board_border = "black";
 const board_background = "white";
@@ -8,7 +9,7 @@ const snake_border = "darkblue";
 
 let dx = 10;
 let dy = 0;
-
+let foodX, foodY;
 //snake
 let snake = [
   { x: 200, y: 200 },
@@ -19,6 +20,7 @@ let snake = [
 ];
 
 main();
+genFood();
 
 document.addEventListener("keydown", changeDirection);
 
@@ -28,6 +30,7 @@ function main() {
   }
   setTimeout(() => {
     clearCanvas();
+    showFood();
     moveSnake();
     drawSnake();
     main();
@@ -88,7 +91,6 @@ function checkForGameEnd() {
   for (let i = 4; i < snake.length; i++) {
     const hasCollided = snake[i].x === snake[0].x && snake[i].y === snake[0].y;
     if (hasCollided) {
-      console.log("ended");
       return true;
     }
   }
@@ -98,4 +100,23 @@ function checkForGameEnd() {
   const bottomWall = snake[0].y > snakeBoard.height - 10;
 
   return leftWall || rightWall || topWall || bottomWall;
+}
+
+function showFood() {
+  snakeBoardCtx.fillStyle = "lightgreen";
+  snakeBoardCtx.strokeStyle = "darkgreen";
+  snakeBoardCtx.fillRect(foodX, foodY, 10, 10);
+  snakeBoardCtx.strokeRect(foodX, foodY, 10, 10);
+}
+
+function genFood() {
+  foodX = Math.random() * 390 + 10;
+  foodY = Math.random() * 390 + 10;
+
+  snake.forEach((part) => {
+    const hasEaten = part.x == foodX && part.y == foodY;
+    if (hasEaten) {
+      genFood();
+    }
+  });
 }
